@@ -1,0 +1,17 @@
+{
+    "name": "Cabinet",
+    "rootNamespace": "",
+    "references": [
+        "GUID:778428952994dca49b7b983c2e8dbe8f",
+        "GUID:37234f57e91aec74c84692dcd13e47fc"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

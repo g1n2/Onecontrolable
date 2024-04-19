@@ -4,17 +4,17 @@ using UnityEngine;
 
 public class Move3D : MonoBehaviour
 {
+    [Header("Andar")]
+    [SerializeField] public float walkSpeed;
+    [SerializeField] public float walkDistance;
+    private string lookingDirection;
     private bool canWalk,canLerp,canSpin,isInteracting,canInteract;
     private Vector3 toGo,toSpin;
-    [SerializeField] private string lookingDirection;
-    [SerializeField] private float walkSpeed;
-    [SerializeField] private float walkDistance;
 
-
-    public Transform checkFront,checkBack;
-    [SerializeField] private LayerMask stopMove,interactable;
+    [Header("Check de Parede")]  
     [SerializeField] private float radius;
-
+    [SerializeField] private LayerMask stopMove,interactable;
+    public Transform checkFront,checkBack;
     // Start is called before the first frame update
     void Start()
     {
@@ -26,17 +26,12 @@ public class Move3D : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
-
         if (canLerp)
             transform.localPosition = Vector3.MoveTowards(transform.localPosition,toGo,walkSpeed);
         // transform.localPosition = Vector3.Lerp(transform.localPosition, toGo, walkSpeed);
 
         if (canSpin)
-            transform.localRotation = Quaternion.Slerp(transform.localRotation,Quaternion.Euler(toSpin), walkSpeed);
-           
-
-    
+            transform.localRotation = Quaternion.RotateTowards(transform.localRotation,Quaternion.Euler(toSpin), 5f);
 
         if (isInteracting) {
             canSpin = false;
@@ -44,28 +39,23 @@ public class Move3D : MonoBehaviour
 
         if (canWalk)
         {
-
-                  
-            if ((Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow)) && !Physics.CheckSphere(checkFront.position, radius, stopMove))
+            if (Input.GetKeyDown(KeyCode.W) && !Physics.CheckSphere(checkFront.position, radius, stopMove))
             {
                 StartCoroutine(move(walkDistance));
             }
-            else if ((Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow)) && !Physics.CheckSphere(checkBack.position, radius, stopMove))
+            else if (Input.GetKeyDown(KeyCode.S) && !Physics.CheckSphere(checkBack.position, radius, stopMove))
             {
                 StartCoroutine(move(-walkDistance));
             }
 
-            else if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow))
+            else if (Input.GetKeyDown(KeyCode.D))
             {
-                StartCoroutine(rotate(1));
+                StartCoroutine(rotate(90));
             }
-            else if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow))
+            else if (Input.GetKeyDown(KeyCode.A))
             {
-                StartCoroutine(rotate(-1));
+                StartCoroutine(rotate(-90));
             }
-
-
-           
         }
 
         if (canInteract)
@@ -78,13 +68,9 @@ public class Move3D : MonoBehaviour
             
     }
 
-
+    //qual a direcao q ele tem q se mover
     void walk(float direction)
     {
-
- 
-      
-
             switch (lookingDirection)
             {
 
@@ -106,14 +92,10 @@ public class Move3D : MonoBehaviour
 
                     break;
             }
-
-        
-
-        
     }
 
 
-
+    //checa qual direcao ele esta olgando
     void checarAngulo()
     {
         float yRotation = transform.localRotation.eulerAngles.y;
@@ -145,18 +127,23 @@ public class Move3D : MonoBehaviour
         }
     }
 
+    //quando ele interage com algo
     IEnumerator interaction()
     {
         canInteract = false;
+
+        //Debug.Log("pressed e");
+        //Debug.DrawRay(gameObject.transform.position, gameObject.transform.forward,Color.red,2);
 
         Ray r = new Ray(gameObject.transform.position, gameObject.transform.forward);
         if (Physics.Raycast(r, out RaycastHit hitInfo, 2))
             if (hitInfo.collider.gameObject.TryGetComponent(out IInteract interactObj))
             {
-
+               // Debug.Log("detected");
                 if (!isInteracting)
                 {
                     interactObj.interact();
+                    //todo: mudar isso
                     isInteracting = true;
                     canWalk = false;
                 }
@@ -164,6 +151,7 @@ public class Move3D : MonoBehaviour
                 {
                     interactObj.stopInteract();
                     yield return new WaitForSeconds(1f);
+                    //todo: mudar isso
                     isInteracting = false;
                     canWalk = true;
                 }
@@ -173,6 +161,7 @@ public class Move3D : MonoBehaviour
         canInteract = true;
     }
 
+    //pra onde ele tem q ir
     IEnumerator move(float direction)
     {
         checarAngulo();
@@ -186,20 +175,22 @@ public class Move3D : MonoBehaviour
         canInteract = true;
     }
 
+    //direcao q ele gira
     IEnumerator rotate(float direction)
     {
         canInteract = false;
         canWalk = false;
         canSpin = true;
         toSpin += new Vector3(roundTo10( transform.localRotation.x),
-                                roundTo10(transform.localRotation.y-(-direction*90)),
-                                roundTo10(transform.localRotation.z));
+                             roundTo10(transform.localRotation.y+direction),
+                             roundTo10(transform.localRotation.z));
         yield return new WaitForSeconds(walkSpeed + 0.2f);
         canWalk = true;
         canSpin = false;
         canInteract = true;
     }
 
+    //faz o personagem "nao sair dos trilhos"
     float roundTo10(float i)
     {
         float value = i / 10;

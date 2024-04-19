@@ -4,7 +4,6 @@ using UnityEngine.Tilemaps;
 public class CorrectionMap : MonoBehaviour
 {
     [SerializeField] private LayerMask stop;
-    private Transform[] tilemap;
     [Range(-1, 1)] [SerializeField] private float correctionValueX, correctionValueY;
 
 

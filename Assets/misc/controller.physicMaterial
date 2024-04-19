@@ -9,6 +9,6 @@ PhysicMaterial:
   m_Name: controller
   dynamicFriction: 0.03
   staticFriction: 0.6
-  bounciness: 0
+  bounciness: 1
   frictionCombine: 0
   bounceCombine: 0

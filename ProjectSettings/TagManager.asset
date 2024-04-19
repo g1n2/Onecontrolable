@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Butt
   - area
+  - Enemy2d
   layers:
   - Default
   - TransparentFX
@@ -15,10 +16,10 @@ TagManager:
   - UI
   - Unwalkable
   - PlayerMask
-  - 
-  - 
-  - 
-  - 
+  - Controller
+  - ArcadeMachineFloor
+  - Cabine
+  - Enemy
   - 
   - 
   - 

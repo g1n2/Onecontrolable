@@ -7,6 +7,8 @@ TagManager:
   - Butt
   - area
   - Enemy2d
+  - door2d
+  - wall2d
   layers:
   - Default
   - TransparentFX
@@ -20,7 +22,7 @@ TagManager:
   - ArcadeMachineFloor
   - Cabine
   - Enemy
-  - 
+  - Text&Ghost
   - 
   - 
   - 

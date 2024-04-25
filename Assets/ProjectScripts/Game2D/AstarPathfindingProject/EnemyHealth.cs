@@ -4,6 +4,14 @@ using UnityEngine;
 
 public class EnemyHealth : charsHP
 {
+    private CloseDoors2d cd;
+
+    private void Start()
+    {
+        base.Start();
+        cd = FindAnyObjectByType<CloseDoors2d>();
+
+    }
 
     private void FixedUpdate()
     {
@@ -18,7 +26,6 @@ public class EnemyHealth : charsHP
             if (anim != null)
             {
                 anim.Play("Die");
-
             }
 
         }
@@ -26,7 +33,10 @@ public class EnemyHealth : charsHP
 
     public void delete()
     {
-        Destroy(gameObject);
+        sprRender.enabled = false;
+        BoxCollider2D box = gameObject.GetComponent<BoxCollider2D>();
+        box.enabled = false;
+        //Destroy(gameObject);
     }
     
 }

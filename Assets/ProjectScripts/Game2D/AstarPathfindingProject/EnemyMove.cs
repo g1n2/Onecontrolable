@@ -27,11 +27,15 @@ public class EnemyMove : MovingCharacters
     private Renderer renderer1;
     private SpriteRenderer spriteSkeleton;
     private PlayerHealth playerHP;
+    private EnemyHealth enemyHP;
+    private CloseDoors2d cd;
 
     // Start is called before the first frame update
     void Start()
     {
+        enemyHP = GetComponent<EnemyHealth>();
         playerHP = FindObjectOfType<PlayerHealth>();
+        cd = FindObjectOfType<CloseDoors2d>();
         renderer1 = GetComponentInChildren<Renderer>();
         spriteSkeleton= GetComponentInChildren<SpriteRenderer>();
         nextMoveTime = Random.Range(nextMoveTimeMIN, nextMoveTimeMAX);
@@ -51,67 +55,72 @@ public class EnemyMove : MovingCharacters
 
         gridMovement();
 
-  
+        if(enemyHP.health<=0)
+            cd.removeFromList(gameObject);
 
-
-        //verifica se vc esta na mesma sala que o inimigo
-        if (GeometryUtility.TestPlanesAABB(GeometryUtility.CalculateFrustumPlanes(camera1), renderer1.bounds))
+        if (enemyHP.health > 0)
         {
-
-
-            if (path == null)
-                return;
-
-            if(currentWaypoint >= path.vectorPath.Count)
+            //verifica se vc esta na mesma sala que o inimigo
+            if (GeometryUtility.TestPlanesAABB(GeometryUtility.CalculateFrustumPlanes(camera1), renderer1.bounds))
             {
-                reachedEndPath = true;
-                return;
-            }
-            else
-            {
-                reachedEndPath = false;
-            }
 
-            Vector2 direction = ((Vector3)path.vectorPath[currentWaypoint] - transform.position).normalized;
+                cd.closeDoors();
+                cd.addToList(gameObject);
 
-            float distance = Vector2.Distance(transform.position, path.vectorPath[currentWaypoint]);
-            if (distance < nextWaypointDist)
-            {
-                currentWaypoint++;
-            }
+                if (path == null)
+                    return;
 
-
-            timer -= Time.deltaTime;
-            if (timer <= 0)
-            {
-                timer = nextMoveTime;
-                // Debug.Log("player detectado");
-                if (Mathf.Abs(direction.y) > Mathf.Abs(direction.x))
+                if (currentWaypoint >= path.vectorPath.Count)
                 {
-                    if (direction.y > 0)
-                    {
-                        checkU();
-                        
-                    }
-                    else
-                    {
-                        checkD();
-                    }
+                    reachedEndPath = true;
+                    return;
                 }
-                // Verificar se o objeto está indo para a esquerda ou para a direita
                 else
                 {
-                    if (direction.x > 0)
+                    reachedEndPath = false;
+                }
+
+                Vector2 direction = ((Vector3)path.vectorPath[currentWaypoint] - transform.position).normalized;
+
+                float distance = Vector2.Distance(transform.position, path.vectorPath[currentWaypoint]);
+                if (distance < nextWaypointDist)
+                {
+                    currentWaypoint++;
+                }
+
+
+                timer -= Time.deltaTime;
+                if (timer <= 0)
+                {
+                    timer = nextMoveTime;
+                    // Debug.Log("player detectado");
+                    if (Mathf.Abs(direction.y) > Mathf.Abs(direction.x))
                     {
-                        checkR();
+                        if (direction.y > 0)
+                        {
+                            checkU();
+
+                        }
+                        else
+                        {
+                            checkD();
+                        }
                     }
+                    // Verificar se o objeto está indo para a esquerda ou para a direita
                     else
                     {
-                        checkL();
+                        if (direction.x > 0)
+                        {
+                            checkR();
+                        }
+                        else
+                        {
+                            checkL();
+                        }
+
+
+
                     }
-
-
-
                 }
             }
         }

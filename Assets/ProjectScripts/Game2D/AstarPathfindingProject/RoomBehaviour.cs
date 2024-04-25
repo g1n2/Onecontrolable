@@ -7,6 +7,7 @@ public class RoomBehaviour : MonoBehaviour
 {
 
     [SerializeField] private GameObject[] walls;
+    [SerializeField] private GameObject[] doors;
     [SerializeField] private int roomVariance;
 
 
@@ -22,9 +23,6 @@ public class RoomBehaviour : MonoBehaviour
     void Start()
     {
         UpdateRoom(testStatus);
-
-
-        
     }
 
     // Update is called once per frame
@@ -33,6 +31,7 @@ public class RoomBehaviour : MonoBehaviour
         for(int i = 0; i<status.Length; i++)
         {
             walls[i].SetActive(!status[i]);
+            doors[i].SetActive(status[i]);
             placeTile(status);
         }
     }

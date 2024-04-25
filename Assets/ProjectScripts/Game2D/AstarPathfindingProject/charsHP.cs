@@ -9,7 +9,7 @@ public class charsHP : MonoBehaviour
     [SerializeField] private Material flashMaterial;
     [SerializeField] private float duration;
     [HideInInspector] public Animator anim;
-    [HideInInspector]public SpriteRenderer sprRender;
+    [HideInInspector] public SpriteRenderer sprRender;
 
     private Material originalMat;
     private Coroutine flashCoroutine;
@@ -21,7 +21,7 @@ public class charsHP : MonoBehaviour
         originalMat = sprRender.material;
     }
 
-    public void loseHP(float damage)
+    public virtual void loseHP(float damage)
     {
         if(flashCoroutine != null)
         {

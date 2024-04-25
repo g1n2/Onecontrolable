@@ -31,6 +31,7 @@ public class PlayerMove : MovingCharacters
     {
         gridMovement();
 
+
     }
 
     public override void walkR()
@@ -38,7 +39,6 @@ public class PlayerMove : MovingCharacters
         base.walkR();
         StartCoroutine(resetDir());
         StartCoroutine(WalkAnim("Side", false,false));
-
         if (walkCycle==1)       
              weapon.transform.localPosition = new Vector3(originalWeaponPos.x + 0.1f , originalWeaponPos.y, originalWeaponPos.z);
         else

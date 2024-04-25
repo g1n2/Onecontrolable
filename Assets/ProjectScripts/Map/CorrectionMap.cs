@@ -17,7 +17,22 @@ public class CorrectionMap : MonoBehaviour
             
             tiles.transform.localPosition = new Vector2(correctionValueX, correctionValueY);
         }
+        
+        GameObject[] gameobj = GameObject.FindGameObjectsWithTag("door2d");
+        /*
+        foreach (GameObject obj in gameobj)
+        {
+            obj.transform.localPosition = new Vector2(
+               obj.transform.localPosition.x + correctionValueX,
+               obj.transform.localPosition.y + correctionValueY);
 
+        }
+        *
+        foreach (GameObject obj in gameobj)
+        {
+            obj.transform.localPosition = new Vector2(correctionValueX,correctionValueY);
+        }
+        */
         GameObject[] objetoNaCamada = GameObject.FindObjectsOfType<GameObject>();
 
         foreach (GameObject obj in objetoNaCamada)

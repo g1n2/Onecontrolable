@@ -26,12 +26,17 @@ public class Move3D : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        /*
         if (canLerp)
             transform.localPosition = Vector3.MoveTowards(transform.localPosition,toGo,walkSpeed);
         // transform.localPosition = Vector3.Lerp(transform.localPosition, toGo, walkSpeed);
 
         if (canSpin)
             transform.localRotation = Quaternion.RotateTowards(transform.localRotation,Quaternion.Euler(toSpin), 5f);
+        */
+
+        
+
 
         if (isInteracting) {
             canSpin = false;
@@ -167,9 +172,15 @@ public class Move3D : MonoBehaviour
         checarAngulo();
         canInteract = false;
         canWalk = false;
-        canLerp = true;
+        //canLerp = true;
         walk(direction);
-        yield return new WaitForSeconds(walkSpeed + 0.2f);
+
+        while (Vector3.Distance(transform.localPosition, toGo) > 0.01f)
+        {
+            // Move o personagem em direção ao destino com a velocidade suavizada pelo tempo.
+            transform.localPosition = Vector3.MoveTowards(transform.localPosition, toGo, walkSpeed);
+            yield return null;
+        }
         canWalk = true;
         canLerp = false;
         canInteract = true;
@@ -184,6 +195,13 @@ public class Move3D : MonoBehaviour
         toSpin += new Vector3(roundTo10( transform.localRotation.x),
                              roundTo10(transform.localRotation.y+direction),
                              roundTo10(transform.localRotation.z));
+        while (Quaternion.Angle(transform.rotation,Quaternion.Euler (toSpin))>0.1f )
+        {
+            transform.localRotation = Quaternion.RotateTowards
+                (transform.localRotation, Quaternion.Euler(toSpin), 5f);
+            yield return null;
+        }
+
         yield return new WaitForSeconds(walkSpeed + 0.2f);
         canWalk = true;
         canSpin = false;

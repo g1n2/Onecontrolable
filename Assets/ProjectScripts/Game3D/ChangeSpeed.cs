@@ -13,8 +13,8 @@ public class ChangeSpeed : MonoBehaviour
     {
         move3d = player.GetComponent<Move3D>();
         normalDistance = move3d.walkDistance;
-        normalSpeed = move3d.walkSpeed;
-        newSpeed = 0.5f;
+        normalSpeed = move3d.currentWalkSpeed;
+        //newSpeed = 0.75f;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -22,7 +22,7 @@ public class ChangeSpeed : MonoBehaviour
         if (other.gameObject == player)
         {
             move3d.walkDistance = newDistance;
-            move3d.walkSpeed = normalSpeed * newSpeed;
+            move3d.currentWalkSpeed = normalSpeed * newSpeed;
         }
     }
 
@@ -31,7 +31,7 @@ public class ChangeSpeed : MonoBehaviour
         if (other.gameObject == player)
         {
             move3d.walkDistance = normalDistance;
-            move3d.walkSpeed = normalSpeed;
+            move3d.currentWalkSpeed = normalSpeed;
         }
     }
 

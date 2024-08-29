@@ -7,7 +7,7 @@ public class CamSystem : MonoBehaviour
     [SerializeField] [Range(0,1)] private float lerpSpeed;
     [SerializeField] private Transform player;
     [SerializeField] private PlayerMove PM;
-    [HideInInspector ]public Vector3 toGo;
+    [HideInInspector] public Vector3 toGo;
     private bool canLerp;
     
 

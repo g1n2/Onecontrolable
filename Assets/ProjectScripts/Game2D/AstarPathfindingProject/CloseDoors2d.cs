@@ -8,13 +8,22 @@ public class CloseDoors2d : MonoBehaviour
     [SerializeField] private Camera cam;
     private GameObject[] walls;
     private GameObject[] doors;
-    private List<GameObject> enemylist = new List<GameObject>();
+    public List<GameObject> enemylist = new List<GameObject>();
+
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         doors = GameObject.FindGameObjectsWithTag("door2d");
         walls = GameObject.FindGameObjectsWithTag("wall2d");
     }
+    private void Update()
+    {
+        if (enemylist.Count > 0)
+        {
+            closeDoors();
+        }
+    }
+
 
     public void addToList(GameObject obj)
     {
@@ -39,6 +48,8 @@ public class CloseDoors2d : MonoBehaviour
 
     public void closeDoors()
     {
+        
+
 
         foreach (GameObject wall in walls)
         {
@@ -54,9 +65,12 @@ public class CloseDoors2d : MonoBehaviour
             }
         }
 
+       
+
     }
     public void openDoors()
     {
+
 
         foreach (GameObject wall in walls)
         {
@@ -71,6 +85,9 @@ public class CloseDoors2d : MonoBehaviour
                 anim.SetBool("open", true);
             }
         }
-
+        
     }
+
+
+
 }

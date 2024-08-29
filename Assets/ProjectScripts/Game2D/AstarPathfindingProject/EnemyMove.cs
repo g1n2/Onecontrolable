@@ -64,7 +64,6 @@ public class EnemyMove : MovingCharacters
             if (GeometryUtility.TestPlanesAABB(GeometryUtility.CalculateFrustumPlanes(camera1), renderer1.bounds))
             {
 
-                cd.closeDoors();
                 cd.addToList(gameObject);
 
                 if (path == null)

@@ -1,16 +1,22 @@
-using System.Collections;
-using System.Collections.Generic;
+
+using UnityEngine.Audio;
 using UnityEngine;
 
-public class Audio : MonoBehaviour
+[System.Serializable]
+public class Audio 
 {
-    [SerializeField] private AudioSource audioSource;
-    public void playAudio(AudioClip audio)
-    {
+    public AudioClip clip;
+    public string name;
+    public GameObject sound3D;
 
-        audioSource.clip = audio;
-        audioSource.Play();
+    [Range(0,1)]
+    public float volume;
+    [Range(0.1f,3)]
+    public float pitch;
+    public bool globalSound;
+    public bool loop;
 
-    }  
+    [HideInInspector]
+    public AudioSource source;
 
 }

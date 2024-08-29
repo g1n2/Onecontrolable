@@ -7,6 +7,7 @@ public class PlayerHealth : charsHP
 
     [SerializeField] public GameObject sword;
     [SerializeField] private float camMagnitude, camRoughness, camFadeInTime, camFadeOutTime,hitStopTime;
+    [SerializeField] private Animator HPanim;
     private Reset2d reset;
     [HideInInspector] public PlayerMove PM;
     [HideInInspector] public PlayerATK PA;
@@ -25,7 +26,7 @@ public class PlayerHealth : charsHP
     private void FixedUpdate()
     {
         die();
-        
+        HPanim.SetInteger("HP",(int)(health));
 
     }
 

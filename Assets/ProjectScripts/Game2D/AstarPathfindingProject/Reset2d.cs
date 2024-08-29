@@ -13,22 +13,24 @@ public class Reset2d : MonoBehaviour
     [SerializeField] private AnalogGlitch glitchEffect2,mainCamGlitch;
     [SerializeField] private EnemyHealth tutorialEnemy;
     [SerializeField] private AudioClip audio;
-    private Audio audioClass;
+    private CloseDoors2d cd;
+   // private Audio audioClass;
     private GameObject[] enemies;
     private Vector3 startPos;
     private List<Vector3> enemiesStartPos = new List<Vector3>();
     private PlayerHealth PH;
     private CamSystem CS;
-    private bool isOnTutorial = true;
+    [HideInInspector] public bool isOnTutorial = true;
 
     // Start is called before the first frame update
     void Start()
     {
+        cd = GetComponent<CloseDoors2d>();
         PH = GameObject.FindObjectOfType<PlayerHealth>();
         enemies = GameObject.FindGameObjectsWithTag("Enemy2d");
         startPos = new Vector3(player.transform.position.x,player.transform.position.y+0.6f,player.transform.position.z);
         CS = FindObjectOfType<CamSystem>();
-        audioClass = FindAnyObjectByType<Audio>();
+       // audioClass = FindAnyObjectByType<Audio>();
 
         foreach (GameObject i in enemies)
         {
@@ -62,6 +64,8 @@ public class Reset2d : MonoBehaviour
                 enemies[i].gameObject.transform.position = enemiesStartPos[i];
             }
 
+            cd.enemylist.Clear();
+            cd.openDoors();
             txt.SetActive(false);
             PH.sprRender.enabled = true;
             PH.once = true;
@@ -78,10 +82,12 @@ public class Reset2d : MonoBehaviour
         }
         else
         {
-            audioClass.playAudio(audio);
+            // audioClass.playAudio(audio);
+            FindAnyObjectByType<AudioManager>().play("Glitch");
+            FindAnyObjectByType<AudioManager>().stop("Music02");
             txt.SetActive(true);
             txt.GetComponent<TextMesh>().text = "NOT NOW";
-            txt.GetComponent<TextMesh>().color = new Vector4(0,0,0,255);
+            txt.GetComponent<TextMesh>().color = new Vector4(99,0,0,255);
             glitchEffect.intensity = 0.3f;
             glitchEffect2.scanLineJitter = 0.3f;
             glitchEffect2.verticalJump = 0.3f;
@@ -92,6 +98,7 @@ public class Reset2d : MonoBehaviour
 
             yield return new WaitForSeconds(1f);
 
+          //  FindAnyObjectByType<AudioManager>().play("Music01");
             PH.health = 3;
             PH.PM.enabled = true;
             PH.PA.enabled = true;
@@ -100,7 +107,7 @@ public class Reset2d : MonoBehaviour
             PH.sword.SetActive(true);
             PH.sprRender.enabled = true;
             PH.once = true;
-            txt.GetComponent<TextMesh>().text = "YOU DIED";
+            txt.GetComponent<TextMesh>().text = "GAME OVER";
             txt.GetComponent<TextMesh>().color = new Vector4(255,255,255,255);
             txt.SetActive(false);
             glitchEffect.intensity = 0f;

@@ -5,11 +5,16 @@ using UnityEngine;
 public class Move3D : MonoBehaviour
 {
     [Header("Andar")]
-    [SerializeField] public float walkSpeed;
+    [SerializeField] private float walkSpeed;
+    [SerializeField] private float turnSpeed;
     [SerializeField] public float walkDistance;
+    [SerializeField] private Animator anim;
+    public float currentTurnSpeed, currentWalkSpeed;
     private string lookingDirection;
-    private bool canWalk,canLerp,canSpin,isInteracting,canInteract;
+    private bool canWalk,isInteracting,canInteract;
     private Vector3 toGo,toSpin;
+
+
 
     [Header("Check de Parede")]  
     [SerializeField] private float radius;
@@ -35,12 +40,21 @@ public class Move3D : MonoBehaviour
             transform.localRotation = Quaternion.RotateTowards(transform.localRotation,Quaternion.Euler(toSpin), 5f);
         */
 
-        
+        bool chased = false;
 
 
-        if (isInteracting) {
-            canSpin = false;
+        if (chased)
+        {
+            currentWalkSpeed = walkSpeed * 2;
+            currentTurnSpeed = turnSpeed * 2;
         }
+        else
+        {
+            currentWalkSpeed = walkSpeed;
+            currentTurnSpeed = turnSpeed;
+        }
+
+
 
         if (canWalk)
         {
@@ -178,11 +192,12 @@ public class Move3D : MonoBehaviour
         while (Vector3.Distance(transform.localPosition, toGo) > 0.01f)
         {
             // Move o personagem em direção ao destino com a velocidade suavizada pelo tempo.
-            transform.localPosition = Vector3.MoveTowards(transform.localPosition, toGo, walkSpeed);
+            transform.localPosition = Vector3.MoveTowards(transform.localPosition, toGo, currentWalkSpeed);
+            anim.SetBool("walk", true);
             yield return null;
         }
+        anim.SetBool("walk", false);
         canWalk = true;
-        canLerp = false;
         canInteract = true;
     }
 
@@ -191,20 +206,18 @@ public class Move3D : MonoBehaviour
     {
         canInteract = false;
         canWalk = false;
-        canSpin = true;
         toSpin += new Vector3(roundTo10( transform.localRotation.x),
                              roundTo10(transform.localRotation.y+direction),
                              roundTo10(transform.localRotation.z));
         while (Quaternion.Angle(transform.rotation,Quaternion.Euler (toSpin))>0.1f )
         {
             transform.localRotation = Quaternion.RotateTowards
-                (transform.localRotation, Quaternion.Euler(toSpin), 5f);
+                (transform.localRotation, Quaternion.Euler(toSpin), currentTurnSpeed);
             yield return null;
         }
 
         yield return new WaitForSeconds(walkSpeed + 0.2f);
         canWalk = true;
-        canSpin = false;
         canInteract = true;
     }
 
@@ -216,6 +229,11 @@ public class Move3D : MonoBehaviour
         return value * 10;
 
     }
+
+   
+
+
+    
 
 }
 
